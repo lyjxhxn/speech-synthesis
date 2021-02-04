@@ -1,6 +1,4 @@
----
 
----
 
 ### Ai语音合成软件
 
@@ -16,7 +14,7 @@
 
 **2、[语音合成必要sdk获取链接及使用方法](https://www.alibabacloud.com/help/zh/doc-detail/120699.htm)**
 
-![](F:\py\语音合成\发布\01.png)
+![](https://github.com/lyjxhxn/speech-synthesis/blob/main/01.png)
 
 **3、[阿里云SDK核心库使用方法](https://help.aliyun.com/document_detail/72153.html)**
 
