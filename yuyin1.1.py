@@ -36,7 +36,7 @@ class mywindow(QtWidgets.QMainWindow, Ui_Form):
         self.yusu = 0
         self.yudiao = 0
         # self.geshi = 'wav'
-        # self.people_name = 'Xiaoyun'
+        self.people_name = '小云 标准女声'
         self.lineEditPath.setText(os.getcwd())#设置默认路径
         self.tabindex = 0       
         self.spinBox_YL.valueChanged.connect(self.Valuechange_YL)#绑定槽函数联动
@@ -45,13 +45,16 @@ class mywindow(QtWidgets.QMainWindow, Ui_Form):
         self.horizontalSlider_YS.valueChanged.connect(self.huakuai_YS)
         self.spinBox_YD.valueChanged.connect(self.Valuechange_YD)#绑定槽函数联动
         self.horizontalSlider_YD.valueChanged.connect(self.huakuai_YD)
-        self.lineEditPath_name.setText('试听')
         self.AuditionBut_thread = MyBeautifulThread()#实例化试听
         self.AuditionBut_thread.trigger.connect(self.shiting)#链接多线程下载
-        
+        # self.tabWidget.tabBarClicked.connect(self.tabqh)#绑定槽函数联动
         # print(self.tabWidget.activateWindow())
-        
-        self.tabWidget.currentChanged.connect(self.tabqiehuan)#切换标签发射信号
+        self.lineEditPath_name.setText('试听')
+        self.buttonGroup=QtWidgets.QButtonGroup(self.tabWidget)#实例化radiobut组
+        for RadioButton in self.tabWidget.findChildren(QRadioButton):
+            self.buttonGroup.addButton(RadioButton)    #向radiobut组内添加按钮
+        self.buttonGroup.buttonClicked.connect(self.get_people_name)#绑定buttonGroup按钮
+        # self.tabWidget.tabBarClicked.connect(self.tabqiehuan)#切换标签发射信号
         # self.plainTextEdit.setPlaceholderText('哎呀，你要问我喜欢吃什么，我能答上一堆。问我不喜欢的啊，那我还真答不上来。')
 
 
@@ -79,38 +82,18 @@ class mywindow(QtWidgets.QMainWindow, Ui_Form):
                 print(RadioButton.text())
                 geshi = RadioButton.text()
         return geshi
-                
+
+
+
+
     def get_people_name(self):
         '''获取选中人名'''
-        people_name = 'Xiaoyun'
-        if self.tabindex == 0:
-            for RadioButton in self.tab_ty.findChildren(QRadioButton):
-                if RadioButton.isChecked() == True:
-                    print(RadioButton.text())
-                    people_name = RadioButton.text()
-        elif self.tabindex == 1:
-            for RadioButton in self.tab_kf.findChildren(QRadioButton):
-                if RadioButton.isChecked() == True:
-                    print(RadioButton.text())
-                    people_name = RadioButton.text()
-        elif self.tabindex == 2:
-            for RadioButton in self.tab_wx.findChildren(QRadioButton):
-                if RadioButton.isChecked() == True:
-                    print(RadioButton.text())
-                    people_name = RadioButton.text()
-        elif self.tabindex == 3:
-            for RadioButton in self.tab_ts.findChildren(QRadioButton):
-                if RadioButton.isChecked() == True:
-                    print(RadioButton.text())
-                    people_name = RadioButton.text()
-        elif self.tabindex == 4:
-            for RadioButton in self.tab_fy.findChildren(QRadioButton):
-                if RadioButton.isChecked() == True:
-                    print(RadioButton.text())
-                    people_name = RadioButton.text()
-
-
-        return people_name
+        for RadioButton in self.tabWidget.findChildren(QRadioButton):
+            if RadioButton.isChecked() == True:
+                self.people_name = RadioButton.text()
+                print(self.people_name)
+        
+       
 
     def quit(self):
         app.exit()
@@ -140,9 +123,9 @@ class mywindow(QtWidgets.QMainWindow, Ui_Form):
 
         text = self.plainTextEdit.toPlainText()
         if text != '':
-            people_name = self.get_people_name()
-            mingzi = ren_name.get(people_name[:2])
-            message = '名字：'+people_name[:2]+',格式：mp3'+',音量：'+str(self.yinliang)+',语速：'+str(self.yusu)+',语调：'+str(self.yudiao)
+           
+            mingzi = ren_name.get(self.people_name[:2])
+            message = '名字：'+self.people_name+',格式：mp3'+',音量：'+str(self.yinliang)+',语速：'+str(self.yusu)+',语调：'+str(self.yudiao)
             process(client, appkey, token, text, self.audio_name,mingzi,'mp3',self.yinliang,self.yusu,self.yudiao)
             
     
@@ -190,10 +173,9 @@ class mywindow(QtWidgets.QMainWindow, Ui_Form):
         geshi = self.get_geshi()
         audio_name = path + '\\'+filename + '.'+geshi
         # print(audio_name)
-        people_name = self.get_people_name()
-        mingzi = ren_name.get(people_name[:2])
-        # yinliang = self.yinliang
-        message = '名字：'+people_name[:2]+',格式：'+geshi+',音量：'+str(self.yinliang)+',语速：'+str(self.yusu)+',语调：'+str(self.yudiao)
+        # people_name = self.get_people_name()
+        mingzi = ren_name.get(self.people_name[:2])
+        message = '名字：'+self.people_name+',格式：'+geshi+',音量：'+str(self.yinliang)+',语速：'+str(self.yusu)+',语调：'+str(self.yudiao)
         process(client, appkey, token, text, audio_name,mingzi,geshi,self.yinliang,self.yusu,self.yudiao)
         self.statusBar().showMessage(message+'----恭喜----下载成功！')
 
@@ -295,6 +277,7 @@ def process_multithread(client, appkey, token, number):
     for thread in thread_list:
         thread.join()
 
+people_list = []
 
 ren_name = {'小云': 'Xiaoyun', '小刚': 'Xiaogang', '若兮': 'Ruoxi', '思琪': 'Siqi', '思佳': 'Sijia', '思诚': 'Sicheng', '艾琪': 'Aiqi', '艾佳': 'Aijia', '艾诚': 'Aicheng', '艾达': 'Aida', '宁儿': 'Ninger', '瑞琳': 'Ruilin', '思悦': 'Siyue', '艾雅': 'Aiya', '艾夏': 'Aixia', '艾美': 'Aimei', '艾雨': 'Aiyu', '艾悦': 'Aiyue', '艾婧': 'Aijing', '小美': 'Xiaomei', '艾娜': 'Aina', '伊娜': 'Yina', '思婧': 'Sijing', '思彤': 'Sitong', '小北': 'Xiaobei', '艾彤': 'Aitong', '艾薇': 'Aiwei', '艾宝': 'Aibao', 'Harry': 
 'Harry', 'Abby': 'Abby', 'Andy': 'Andy', 'Eric': 'Eric', 'Emily': 'Emily', 'Luna': 'Luna', 'Luca': 'Luca', 'Wendy': 'Wendy', 'William': 'William', 'Olivia': 'Olivia', '姗姗': 'Shanshan', '艾媛': 'Aiyuan', '艾颖': 'Aiying', '艾祥': 'Aixiang', '艾墨': 'Aimo', '艾晔': 'Aiye', '艾婷': 'Aiting', '艾凡': 'Aifan', 'Lydia': 'Lydia', '小玥': 'Xiaoyue', '艾硕': 'Aishuo', '艾德': 'Aide', '青青': 'Qingqing', '翠姐': 'Cuijie', '小泽': 'Xiaoze', '艾楠': 'Ainan', '艾浩': 'Aihao', '艾茗': 'Aiming', '艾笑': 'Aixiao', '艾厨': 'Aichu', '艾倩': 'Aiqian', '智香': 'Tomoka', '智也': 'Tomoya', 'Annie': 'Annie'}

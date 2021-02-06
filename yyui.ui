@@ -590,7 +590,7 @@
       <string>思悦 温柔女声</string>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="radioButton_Aiya">
@@ -840,8 +840,11 @@
      <property name="text">
       <string>艾媛 知心姐姐</string>
      </property>
-     <property name="checked">
+     <property name="checkable">
       <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="radioButton_Aiying">
@@ -949,8 +952,11 @@
      <property name="text">
       <string>思彤 儿童音</string>
      </property>
-     <property name="checked">
+     <property name="checkable">
       <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="radioButton_Xiaobei">
@@ -1058,8 +1064,11 @@
      <property name="text">
       <string>姗姗 粤语女声</string>
      </property>
-     <property name="checked">
+     <property name="checkable">
       <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="radioButton_Xiaoyue">
